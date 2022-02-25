@@ -6,12 +6,14 @@ const app = Vue.createApp({
             vieIA:100,
             currentRound:0,
             disabledMagie: false,
+            disabledAction: false,
             winner: ''
         };
     },
 
     methods: {
         attackAdversaire() {
+            this.disabledAction = true;
             let random = 10 + Math.floor(Math.random()*10);
             this.vieIA -= random;
 
@@ -30,12 +32,15 @@ const app = Vue.createApp({
                 let random = 13 + Math.floor(Math.random()*13);
                 this.viePerso -= random;
 
+                this.disabledAction = false;
+
                 if(this.viePerso < 0){
                     this.viePerso = 0;
                 }
             },1000);
         },
         attackMagik() {
+            this.disabledAction = true;
             let random = 20 + Math.floor(Math.random()*20);
             this.vieIA -= random;
 
@@ -48,6 +53,7 @@ const app = Vue.createApp({
             }
         },
         soigner() {
+            this.disabledAction = true;
             let random = 12+ Math.floor(Math.random()*24);
             this.viePerso += random;
             if(this.viePerso > 100){
@@ -61,9 +67,9 @@ const app = Vue.createApp({
         }, 
         abandonner() {
             this.viePerso = 0;
-        }, 
-        theEnd() {
-            
+        },
+        restart() {
+            window.location.reload();
         }
     },
     watch: {
@@ -77,10 +83,12 @@ const app = Vue.createApp({
         },
         viePerso(val) {
             if(val == 0) {
-                this.disabled=false;
+                this.winner = "PERDU";
             }
-            else {
-                this.disabled=true;
+        },
+        vieIA(val) {
+            if(val == 0) {
+                this.winner = "VICTOIRE";;
             }
         }
     },
